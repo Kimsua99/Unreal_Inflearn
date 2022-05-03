@@ -5,6 +5,15 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/PawnMovementComponent.h"
 
+UMyAnimInstance::UMyAnimInstance()
+{
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> AM(TEXT("AnimMontage'/Game/Animations/Greystone_Skeleton_Montage.Greystone_Skeleton_Montage'"));
+	if (AM.Succeeded())
+	{
+		AttackMontage = AM.Object;
+	}
+}
+
 void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);//상위 부모가 super 의미함.
@@ -19,5 +28,13 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		{
 			isFalling = Character->GetMovementComponent()->IsFalling();
 		}
+	}
+}
+
+void UMyAnimInstance::PlayAttackMontage()
+{
+	if (!Montage_IsPlaying(AttackMontage))
+	{
+		Montage_Play(AttackMontage, 1.f);
 	}
 }
